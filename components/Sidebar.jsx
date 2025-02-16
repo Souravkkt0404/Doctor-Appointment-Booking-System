@@ -3,20 +3,28 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useMemo } from "react";
 import {
-  ArticleIcon,
-  CollapsIcon,
-  HomeIcon,
-  LogoIcon,
-  LogoutIcon,
-  UsersIcon,
-  VideosIcon,
-} from "./icons";
+  CalendarCheck,
+  UserPen,
+  MessageSquareText,
+  Bolt,
+  Kanban,
+  Home,
+  Notebook,
+  LogOut,
+  Menu as CollapsIcon,
+  ShieldCheck as LogoIcon,
+} from "lucide-react";
+
 
 const menuItems = [
-  { id: 1, label: "Home", icon: HomeIcon, link: "/" },
-  { id: 2, label: "Manage Posts", icon: ArticleIcon, link: "/posts" },
-  { id: 3, label: "Manage Users", icon: UsersIcon, link: "/users" },
-  { id: 4, label: "Manage Tutorials", icon: VideosIcon, link: "/tutorials" },
+  { id: 1, label: "Home", icon: Home, link: "/" },
+  { id: 2, label: "Overview", icon: Kanban, link: "/overview" },
+  { id: 3, label: "Appointments", icon: CalendarCheck, link: "/appointments" },
+  { id: 4, label: "Doctors", icon: UserPen, link: "/doctors" },
+  { id: 5, label: "Pathology Results", icon: Notebook, link: "/pathology" },
+  { id: 6, label: "Chats", icon: MessageSquareText, link: "/chats" },
+  { id: 7, label: "Account", icon: null, link: null, isHeader: true },
+  { id: 8, label: "Settings", icon: Bolt, link: "/settings" },
 ];
 
 const Sidebar = () => {
@@ -30,10 +38,12 @@ const Sidebar = () => {
     [router.pathname]
   );
 
+
+
   const wrapperClasses = classNames(
-    "h-screen px-4 pt-8 pb-4 bg-light flex justify-between flex-col",
+    "h-screen px-4 pt-8 pb-4 flex justify-between flex-col",
     {
-      ["w-80"]: !toggleCollapse,
+      ["w-50"]: !toggleCollapse,
       ["w-20"]: toggleCollapse,
     }
   );
@@ -49,7 +59,7 @@ const Sidebar = () => {
     return classNames(
       "flex items-center cursor-pointer hover:bg-light-lighter rounded w-full overflow-hidden whitespace-nowrap",
       {
-        ["bg-light-lighter"]: activeMenu.id === menu.id,
+        ["bg-light-lighter"]: activeMenu?.id === menu.id,
       }
     );
   };
@@ -74,7 +84,7 @@ const Sidebar = () => {
           <div className="flex items-center pl-1 gap-4">
             <LogoIcon />
             <span
-              className={classNames("mt-2 text-lg font-medium text-text", {
+              className={classNames("mt-2 text-lg font-medium", {
                 hidden: toggleCollapse,
               })}
             >
@@ -91,20 +101,28 @@ const Sidebar = () => {
           )}
         </div>
 
-        <div className="flex flex-col items-start mt-24">
-          {menuItems.map(({ icon: Icon, ...menu }) => {
+        <div className="flex flex-col items-start mt-8">
+          {menuItems?.map(({ icon: Icon, ...menu }) => {
             const classes = getNavItemClasses(menu);
+            if (menu.isHeader) {
+              return (
+                <div
+                  key={menu.id}
+                  className="mt-6 mb-2 pl-3 text-sm font-semibold text-text-light"
+                >
+                  {menu.label}
+                </div>
+              );
+            }
             return (
-              <div className={classes}>
+              <div key={menu.id} className={classes}>
                 <Link href={menu.link}>
                   <a className="flex py-4 px-3 items-center w-full h-full">
-                    <div style={{ width: "2.5rem" }}>
-                      <Icon />
-                    </div>
+                    <div style={{ width: "2.5rem" }}>{Icon && <Icon />}</div>
                     {!toggleCollapse && (
                       <span
                         className={classNames(
-                          "text-md font-medium text-text-light"
+                          "text-sm font-normal text-text-light"
                         )}
                       >
                         {menu.label}
@@ -120,7 +138,7 @@ const Sidebar = () => {
 
       <div className={`${getNavItemClasses({})} px-3 py-4`}>
         <div style={{ width: "2.5rem" }}>
-          <LogoutIcon />
+          <LogOut />
         </div>
         {!toggleCollapse && (
           <span className={classNames("text-md font-medium text-text-light")}>
