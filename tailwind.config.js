@@ -4,9 +4,9 @@ const colors = require("tailwindcss/colors");
 module.exports = {
   darkMode: "class", // Enable class-based dark mode
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./layouts/**/*.{js,ts,jsx,tsx}", // Ensure layouts are scanned
+    "./pages/**/*.{js,ts,jsx}",
+    "./components/**/*.{js,ts,jsx}",
+    "./layouts/**/*.{js,ts,jsx}", // Ensure layouts are scanned
   ],
   important: true,
   theme: {
