@@ -12,7 +12,7 @@ export default function SubHeader({ title }) {
 
   if (!mounted) return null; // Prevents hydration mismatch
 
-  const isDarkMode = resolvedTheme === "light";
+  const isDarkMode = resolvedTheme === "dark";
 
   return (
     <div className="flex justify-between items-center p-4 w-full">
