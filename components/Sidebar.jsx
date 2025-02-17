@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState, useMemo } from "react";
+import React from "react";
 import {
   CalendarCheck,
   UserPen,
@@ -11,10 +11,8 @@ import {
   Home,
   Notebook,
   LogOut,
-  Menu as CollapsIcon,
   ShieldCheck as LogoIcon,
 } from "lucide-react";
-
 
 const menuItems = [
   { id: 1, label: "Home", icon: Home, link: "/" },
@@ -27,88 +25,62 @@ const menuItems = [
   { id: 8, label: "Settings", icon: Bolt, link: "/settings" },
 ];
 
-const Sidebar = () => {
-  const [toggleCollapse, setToggleCollapse] = useState(false);
-  const [isCollapsible, setIsCollapsible] = useState(false);
-
+const Sidebar = ({ toggleCollapse,isCollapsed  }) => {
   const router = useRouter();
 
-  const activeMenu = useMemo(
-    () => menuItems.find((menu) => menu.link === router.pathname),
-    [router.pathname]
-  );
-
-
+  const activeMenu = menuItems.find((menu) => menu.link === router.pathname);
 
   const wrapperClasses = classNames(
-    "h-screen px-4 pt-8 pb-4 flex justify-between flex-col",
+    "h-screen px-4 pt-8 pb-4 flex justify-between flex-col bg-white dark:bg-gray-900 shadow-lg transition-all duration-300",
     {
-      ["w-50"]: !toggleCollapse,
-      ["w-20"]: toggleCollapse,
-    }
-  );
-
-  const collapseIconClasses = classNames(
-    "p-4 rounded bg-light-lighter absolute right-0",
-    {
-      "rotate-180": toggleCollapse,
+      ["w-60"]: !toggleCollapse,
+      ["w-15"]: toggleCollapse,
     }
   );
 
   const getNavItemClasses = (menu) => {
     return classNames(
-      "flex items-center cursor-pointer hover:bg-light-lighter rounded w-full overflow-hidden whitespace-nowrap",
+      "flex items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded w-full overflow-hidden whitespace-nowrap",
       {
-        ["bg-light-lighter"]: activeMenu?.id === menu.id,
+        ["bg-gray-300 dark:bg-gray-800"]: activeMenu?.id === menu.id,
       }
     );
   };
 
-  const onMouseOver = () => {
-    setIsCollapsible(!isCollapsible);
-  };
-
-  const handleSidebarToggle = () => {
-    setToggleCollapse(!toggleCollapse);
-  };
-
   return (
+    // <div className={wrapperClasses}>
     <div
-      className={wrapperClasses}
-      onMouseEnter={onMouseOver}
-      onMouseLeave={onMouseOver}
-      style={{ transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s" }}
+      className={`h-screen px-4 pt-8 pb-4 flex flex-col transition-all ${
+        isCollapsed ? "w-20" : "w-50"
+      }`}
     >
+      {/* Top Section - Logo */}
       <div className="flex flex-col">
         <div className="flex items-center justify-between relative">
           <div className="flex items-center pl-1 gap-4">
-            <LogoIcon />
+            <LogoIcon className="text-blue-500" />
             <span
-              className={classNames("mt-2 text-lg font-medium", {
-                hidden: toggleCollapse,
-              })}
+              className={classNames(
+                "mt-2 text-lg font-medium text-gray-800 dark:text-white",
+                {
+                  hidden: isCollapsed,
+                }
+              )}
             >
               Logo
             </span>
           </div>
-          {isCollapsible && (
-            <button
-              className={collapseIconClasses}
-              onClick={handleSidebarToggle}
-            >
-              <CollapsIcon />
-            </button>
-          )}
         </div>
 
+        {/* Navigation Menu */}
         <div className="flex flex-col items-start mt-8">
-          {menuItems?.map(({ icon: Icon, ...menu }) => {
+          {menuItems.map(({ icon: Icon, ...menu }) => {
             const classes = getNavItemClasses(menu);
             if (menu.isHeader) {
               return (
                 <div
                   key={menu.id}
-                  className="mt-6 mb-2 pl-3 text-sm font-semibold text-text-light"
+                  className="mt-6 mb-2 pl-3 text-sm font-semibold text-gray-500 dark:text-gray-400"
                 >
                   {menu.label}
                 </div>
@@ -118,13 +90,13 @@ const Sidebar = () => {
               <div key={menu.id} className={classes}>
                 <Link href={menu.link}>
                   <a className="flex py-4 px-3 items-center w-full h-full">
-                    <div style={{ width: "2.5rem" }}>{Icon && <Icon />}</div>
-                    {!toggleCollapse && (
-                      <span
-                        className={classNames(
-                          "text-sm font-normal text-text-light"
-                        )}
-                      >
+                    <div style={{ width: "2.5rem" }}>
+                      {Icon && (
+                        <Icon className="text-gray-600 dark:text-white" />
+                      )}
+                    </div>
+                    {!isCollapsed && (
+                      <span className="text-sm font-normal text-gray-700 dark:text-gray-300">
                         {menu.label}
                       </span>
                     )}
@@ -136,12 +108,13 @@ const Sidebar = () => {
         </div>
       </div>
 
+      {/* Logout Button */}
       <div className={`${getNavItemClasses({})} px-3 py-4`}>
         <div style={{ width: "2.5rem" }}>
-          <LogOut />
+          <LogOut className="text-red-500" />
         </div>
-        {!toggleCollapse && (
-          <span className={classNames("text-md font-medium text-text-light")}>
+        {!isCollapsed && (
+          <span className="text-md font-medium text-gray-700 dark:text-gray-300">
             Logout
           </span>
         )}

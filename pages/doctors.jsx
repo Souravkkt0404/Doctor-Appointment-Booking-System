@@ -10,7 +10,6 @@ export default function Doctors() {
   return (
     <Layout>
       <SubHeader title={"Doctors"} />
-
       <div>
         <FilterBar />
       </div>

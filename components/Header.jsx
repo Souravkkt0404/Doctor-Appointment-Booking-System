@@ -1,23 +1,40 @@
 import { useState } from "react";
-import { BellDotIcon, MoreVertical, Search, User } from "lucide-react";
+import {
+  BellDotIcon,
+  ArrowLeft,
+  ArrowRight,
+  MoreVertical,
+  Search,
+  User,
+} from "lucide-react";
 import { useRouter } from "next/router";
 
-const Header = () => {
+const Header = ({ isSidebarCollapsed, onToggleSidebar }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
 
   return (
     <header className="flex justify-between items-center p-4 border-b shadow-sm w-full sticky top-0 z-50">
-      {/* Search Field */}
+      {/* Sidebar Toggle Button and Search Field */}
       <div className="flex items-center flex-grow max-w-lg relative">
+        <button
+          className="mr-3 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+          onClick={onToggleSidebar}
+        >
+          {isSidebarCollapsed ? (
+            <ArrowRight size={20} />
+          ) : (
+            <ArrowLeft size={20} />
+          )}
+        </button>
         <Search
           size={20}
-          className="text-gray-500 dark:text-white absolute left-3 top-1/2 transform -translate-y-1/2"
+          className="text-gray-500 dark:text-white absolute left-12 top-1/2 transform -translate-y-1/2"
         />
         <input
           type="text"
           placeholder="Search..."
-          className="pl-10 pr-4 py-2 w-full rounded-full border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white dark:bg-gray-800 text-black dark:text-white"
+          className="pl-14 pr-4 py-2 w-full rounded-full border border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white dark:bg-gray-800 text-black dark:text-white"
         />
       </div>
 
